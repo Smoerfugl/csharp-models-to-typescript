@@ -47,18 +47,6 @@
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
         },
-        "NpmCiFeed": {
-          "type": "string"
-        },
-        "NpmFeedPassword": {
-          "type": "string"
-        },
-        "NpmFeedUsername": {
-          "type": "string"
-        },
-        "NpmReleaseFeed": {
-          "type": "string"
-        },
         "Partition": {
           "type": "string",
           "description": "Partition to use on CI"
@@ -88,6 +76,7 @@
               "EnsureCleanPublishDirectory",
               "GetSemVer",
               "NpmPack",
+              "NpmRelease",
               "Publish",
               "Restore",
               "Test"
@@ -108,6 +97,7 @@
               "EnsureCleanPublishDirectory",
               "GetSemVer",
               "NpmPack",
+              "NpmRelease",
               "Publish",
               "Restore",
               "Test"

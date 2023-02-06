@@ -86,11 +86,13 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .DependsOn(GetSemVer)
         .Triggers(NpmPack)
+        .Produces(PublishFolder)
         .Executes(() =>
         {
             var project = Solution.GetProject("csharp-models-to-json");
             DotNetTasks.DotNetPublish(_ =>
                 _.SetProject(project)
+                    .SetNoBuild(true)
                     .SetOutput(PublishFolder)
                     .SetAssemblyVersion(GitVersion.AssemblySemVer)
             );
@@ -102,7 +104,7 @@ class Build : NukeBuild
 
     Target NpmRelease => _ => _
         .DependsOn(NpmPack)
-        .Produces(ReleaseFolder)
+        .Consumes(NpmPack)
         .Executes(() =>
         {
             Directory.CreateDirectory(ReleaseFolder);
@@ -113,6 +115,8 @@ class Build : NukeBuild
 
     Target NpmPack => _ => _
         .DependsOn(Publish)
+        .Triggers(NpmRelease)
+        .Produces(DistFolder)
         .Executes(() =>
         {
             DirectoryHelper.TryDeleteFolder(DistFolder);
@@ -123,9 +127,7 @@ class Build : NukeBuild
                 .ToList();
             jsFiles.ForEach(CopyFileToDist);
             DirectoryHelper.CopyDirectory(PublishFolder,
-                DistFolder +
-                Path.DirectorySeparatorChar +
-                Path.GetRelativePath(RootDirectory, DistFolder),
+                $"{DistFolder}{Path.DirectorySeparatorChar}{Path.GetRelativePath(RootDirectory, DistFolder)}",
                 true);
 
             NpmTasks.Npm($"version {GitVersion.FullSemVer} --allow-same-version", DistFolder);

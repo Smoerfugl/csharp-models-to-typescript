@@ -37,3 +37,11 @@ jobs:
         run: ./build.cmd Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: publish
+          path: publish
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
