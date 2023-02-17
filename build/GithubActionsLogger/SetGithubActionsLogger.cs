@@ -10,7 +10,7 @@ namespace GithubActionsLogger;
 public static class DotNetTestSettingsExtensions
 {
     public static DotNetTestSettings AddGithubActionsLogger(this DotNetTestSettings toolSettings,
-        string resultsDirectory)
+        string resultsDirectory = null)
     {
         Assert.True(GitHubActions.Instance != null);
         var githubActionsPackage = NuGetPackageResolver
@@ -19,7 +19,6 @@ public static class DotNetTestSettingsExtensions
         var loggerPath = githubActionsPackage.Directory / "lib";
         Assert.DirectoryExists(loggerPath);
         return toolSettings
-            .SetResultsDirectory(resultsDirectory)
             .SetLoggers("GitHubActions")
             .SetTestAdapterPath(loggerPath);
     }

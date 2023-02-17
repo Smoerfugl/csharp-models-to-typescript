@@ -20,6 +20,8 @@ namespace CSharpModelsToJson.Tests
                 }"
             );
 
+            Assert.True(false);
+
             var root = (CompilationUnitSyntax)tree.GetRoot();
 
             var modelCollector = new ModelCollector();
